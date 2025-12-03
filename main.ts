@@ -23,6 +23,11 @@ const DEFAULT_SETTINGS: ForwardTaskSettings = {
 	sectionHeader: "",
 };
 
+// Regex patterns for task detection
+const TASK_LINE_REGEX = /^(\s*)([-*])\s+\[(.)\]\s+(.*)$/;
+const OPEN_TASK_REGEX = /^\s*[-*]\s+\[\s\]\s+.+/;
+const ANY_TASK_REGEX = /^\s*[-*]\s+\[[ x>]\]/;
+
 export default class ForwardTaskPlugin extends Plugin {
 	settings: ForwardTaskSettings;
 
@@ -73,7 +78,7 @@ export default class ForwardTaskPlugin extends Plugin {
 		const line = editor.getLine(cursor.line);
 
 		// Parse task line: - [ ] task or * [ ] task
-		const match = /^(\s*)([-*])\s+\[(.)\]\s+(.*)$/.exec(line);
+		const match = TASK_LINE_REGEX.exec(line);
 
 		if (!match) {
 			new Notice("Current line is not a task");
@@ -191,7 +196,7 @@ export default class ForwardTaskPlugin extends Plugin {
 		).find((i) => {
 			const line = editor.getLine(i);
 			// Check if line is an open task: - [ ] or * [ ]
-			return /^\s*[-*]\s+\[\s\]\s+.+/.test(line);
+			return OPEN_TASK_REGEX.test(line);
 		});
 
 		if (nextTaskLineIndex !== undefined) {
@@ -239,8 +244,11 @@ export default class ForwardTaskPlugin extends Plugin {
 			return lines.join("\n");
 		}
 
-		// Ensure there is a blank line before appending at the end
-		if (lines.length > 0 && lines[lines.length - 1] !== "") {
+		// Ensure there is a blank line before appending at the end, but only if the last line is not a task
+		const lastLine = lines.length > 0 ? lines[lines.length - 1] : "";
+		const lastLineIsTask = ANY_TASK_REGEX.test(lastLine);
+
+		if (lines.length > 0 && lastLine !== "" && !lastLineIsTask) {
 			lines.push("");
 		}
 		lines.push(text);
