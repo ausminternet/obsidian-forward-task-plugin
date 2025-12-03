@@ -15,23 +15,23 @@ import {
 	getDateFromFile,
 } from "obsidian-daily-notes-interface";
 
-interface MoveTaskSettings {
+interface ForwardTaskSettings {
 	sectionHeader: string;
 }
 
-const DEFAULT_SETTINGS: MoveTaskSettings = {
+const DEFAULT_SETTINGS: ForwardTaskSettings = {
 	sectionHeader: "",
 };
 
-export default class MoveTaskPlugin extends Plugin {
-	settings: MoveTaskSettings;
+export default class ForwardTaskPlugin extends Plugin {
+	settings: ForwardTaskSettings;
 
 	async onload() {
 		await this.loadSettings();
 
 		this.addCommand({
 			id: "move-current-task-to-daily-note",
-			name: "Move current task to today's Daily Note",
+			name: "Forward current task to today's Daily Note",
 			editorCallback: async (editor: Editor, view: MarkdownView) => {
 				await this.moveTask(editor, view, 0);
 			},
@@ -39,7 +39,7 @@ export default class MoveTaskPlugin extends Plugin {
 
 		this.addCommand({
 			id: "move-current-task-to-tomorrow",
-			name: "Move current task to tomorrow's Daily Note",
+			name: "Forward current task to tomorrow's Daily Note",
 			editorCallback: async (editor: Editor, view: MarkdownView) => {
 				await this.moveTask(editor, view, 1);
 			},
@@ -47,13 +47,13 @@ export default class MoveTaskPlugin extends Plugin {
 
 		this.addCommand({
 			id: "move-current-task-to-next-day",
-			name: "Move current task to next day (relative to current note)",
+			name: "Forward current task to next day (relative to current note)",
 			editorCallback: async (editor: Editor, view: MarkdownView) => {
 				await this.moveTaskRelativeToCurrentNote(editor, view);
 			},
 		});
 
-		this.addSettingTab(new MoveTaskSettingTab(this));
+		this.addSettingTab(new ForwardTaskSettingTab(this));
 	}
 
 	async loadSettings() {
@@ -332,10 +332,10 @@ export default class MoveTaskPlugin extends Plugin {
 	}
 }
 
-class MoveTaskSettingTab extends PluginSettingTab {
-	plugin: MoveTaskPlugin;
+class ForwardTaskSettingTab extends PluginSettingTab {
+	plugin: ForwardTaskPlugin;
 
-	constructor(plugin: MoveTaskPlugin) {
+	constructor(plugin: ForwardTaskPlugin) {
 		super(plugin.app, plugin);
 		this.plugin = plugin;
 	}
@@ -343,10 +343,6 @@ class MoveTaskSettingTab extends PluginSettingTab {
 	display(): void {
 		const { containerEl } = this;
 		containerEl.empty();
-
-		containerEl.createEl("h2", {
-			text: "Forward Task - Settings",
-		});
 
 		containerEl.createEl("p", {
 			text: "This plugin uses the Daily Notes core plugin settings for folder location and date format.",
