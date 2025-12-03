@@ -1,0 +1,10 @@
+{
+	"id": "obsidian-forward-task-plugin",
+	"name": "Forward Task",
+	"version": "1.0.0",
+	"minAppVersion": "0.15.0",
+	"description": "Move tasks to today's or tomorrow's daily note with a single command.",
+	"author": "Jan Hofmann",
+	"authorUrl": "https://github.com/ausminternet",
+	"isDesktopOnly": false
+}
