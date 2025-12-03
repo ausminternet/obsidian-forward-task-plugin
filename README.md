@@ -19,6 +19,8 @@ A simple Obsidian plugin to move tasks from your current note to daily notes.
 - **Daily Notes Core Plugin** must be enabled
 - Obsidian version 0.15.0 or higher
 
+This plugin uses the [obsidian-daily-notes-interface](https://github.com/liamcain/obsidian-daily-notes-interface) library to ensure reliable compatibility with both the core Daily Notes plugin and the Calendar plugin.
+
 ## Usage
 
 ### Commands
